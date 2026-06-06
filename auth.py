@@ -15,6 +15,7 @@ load_dotenv()
 CLIENT_ID: str = os.environ.get("SPOTIFY_CLIENT_ID", "")
 CLIENT_SECRET: str = os.environ.get("SPOTIFY_CLIENT_SECRET", "")
 REDIRECT_URI: str = os.environ.get("SPOTIFY_REDIRECT_URI", "http://127.0.0.1:8888/callback")
+REFRESH_TOKEN_ENV: str = os.environ.get("SPOTIFY_REFRESH_TOKEN", "")
 SCOPES = " ".join([
     "user-read-recently-played", "user-top-read",
     "user-read-currently-playing", "user-read-playback-state",
@@ -127,6 +128,8 @@ def get_access_token() -> str:
     if _access_token:
         return _access_token
     saved = _load_saved()
+    if not saved and REFRESH_TOKEN_ENV:
+        saved = {"refresh_token": REFRESH_TOKEN_ENV, "scope": SCOPES}
     if saved and "refresh_token" in saved and _scopes_ok(saved):
         try:
             _access_token = _refresh(saved)
@@ -143,7 +146,7 @@ def invalidate() -> None:
 
 
 def check_env() -> None:
-    missing = [k for k in ("SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET") if not os.environ.get(k)]
+    missing = [k for k in ("SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET", "SPOTIFY_REFRESH_TOKEN") if not os.environ.get(k)]
     if missing:
         print(f"Missing environment variables: {', '.join(missing)}", file=sys.stderr)
         sys.exit(1)
