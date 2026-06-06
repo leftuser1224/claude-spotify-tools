@@ -1,6 +1,6 @@
 import auth
 from mcp.server.fastmcp import FastMCP
-from tools import history, playlist, playback, search, library, lastfm, discovery
+from tools import history, playlist, playback, search, library, lastfm, discovery, weather
 
 auth.check_env()
 
@@ -68,6 +68,9 @@ mcp.tool()(discovery.traverse_track_graph)
 mcp.tool()(discovery.analyze_listening_evolution)
 mcp.tool()(discovery.analyze_discovery_rate)
 mcp.tool()(discovery.analyze_mood_by_time)
+
+# Weather
+mcp.tool()(weather.get_weather)
 
 if __name__ == "__main__":
     mcp.run()
