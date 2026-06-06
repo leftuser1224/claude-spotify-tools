@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "spotify": {
+      "command": "uv",
+      "args": ["--directory", "/home/user/claude-spotify-tools", "run", "main.py"]
+    }
+  }
+}
