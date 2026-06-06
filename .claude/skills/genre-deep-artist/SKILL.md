@@ -53,7 +53,7 @@ find_hidden_gems(min_listeners=50000, max_listeners=500000)
 
 以下はすべて推薦しない：
 - `analyze_listening_evolution` の consistent / rising / fading に含まれるアーティスト
-- `get_top_artists` の50人に含まれるアーティスト
+- `get_top_artists` で取得した50人に含まれるアーティスト
 
 ### 6. 出力フォーマット
 
