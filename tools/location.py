@@ -3,6 +3,7 @@
 import json
 import urllib.request
 import urllib.parse
+import urllib.error
 from datetime import datetime
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -14,6 +15,9 @@ _CITY_TIMEZONE_MAP = {
     "kyoto": "Asia/Tokyo", "京都": "Asia/Tokyo",
     "sapporo": "Asia/Tokyo", "札幌": "Asia/Tokyo",
     "fukuoka": "Asia/Tokyo", "福岡": "Asia/Tokyo",
+    "kobe": "Asia/Tokyo", "神戸": "Asia/Tokyo",
+    "nagoya": "Asia/Tokyo", "名古屋": "Asia/Tokyo",
+    "yokohama": "Asia/Tokyo", "横浜": "Asia/Tokyo",
     # US
     "new york": "America/New_York", "new york city": "America/New_York",
     "los angeles": "America/Los_Angeles", "la": "America/Los_Angeles",
@@ -59,10 +63,14 @@ async def get_weather(location: str) -> dict:
         天気・気温・現地時刻を含む辞書
     """
     try:
-        location_encoded = location.replace(" ", "+")
+        location_encoded = urllib.parse.quote(location, safe="+")
         url = f"https://wttr.in/{location_encoded}?format=j1"
 
-        with urllib.request.urlopen(url, timeout=10) as response:
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; weather-tool/1.0)"},
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
             data = json.loads(response.read().decode())
 
         current = data.get("current_condition", [{}])[0]
