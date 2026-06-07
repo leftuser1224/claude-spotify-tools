@@ -30,7 +30,9 @@ description: プロンプトの内容をもとにSpotifyのパブリックプレ
 ```
 
 4. **再生**
-   - ユーザーが選んだら `play_context(uri)` で再生
+   - ユーザーが選んだら、必ず以下の順で実行する：
+     1. `set_shuffle(state=false)` でシャッフルをオフ
+     2. `play_context(uri)` で再生（1曲目から順番に流れる）
 
 ## 注意
 - 結果が少ない or nullだらけの場合は別のクエリで再検索する
